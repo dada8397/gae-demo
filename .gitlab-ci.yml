@@ -1,0 +1,14 @@
+image: google/cloud-sdk
+
+deploy:
+  stage: deploy
+  environment: Production
+  only:
+  - master
+  script:
+  - echo $CLIENT_SECRET > /tmp/client_secret.json
+  - gcloud auth activate-service-account --key-file /tmp/client_secret.json
+  - gcloud --project $PROJECT_ID app deploy app.yaml
+
+after_script:
+- rm /tmp/client_secret.json
